@@ -1,0 +1,449 @@
+/*How to consume the api https://serverpruebas.tk/api/product/?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH of prestashop and make a crud in xml format*/
+//
+const express = require('express');
+const app = express();
+const fetch = require('node-fetch');
+const { XMLParser } = require('fast-xml-parser');
+const options = {
+    ignoreAttributes: false,
+    attributeNamePrefix: '',
+};
+const parser = new XMLParser(options);
+
+const getProducts = async () => {
+    try {
+        const res = await fetch(
+            'https://serverpruebas.tk/api/products?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH'
+        );
+        const data = await res.text();
+        let jsonObj = parser.parse(data);
+        let products = jsonObj.prestashop.products.product;
+        let producto = [];
+        let text = '#text';
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({
+                id,
+                price: price * 1.19,
+                quantity: quantity[text],
+                name: name.language[text],
+                reference,
+            });
+        });
+        return producto;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const createProduct = async (product) => {
+    try {
+        const res = await fetch(
+            'https://serverpruebas.tk/api/products?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH',
+
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(product),
+            }
+        );
+        const data = await res.text();
+        let jsonObj = parser.parse(data);
+        let products = jsonObj.prestashop.products.product;
+        let producto = [];
+        let text = '#text';
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({
+                id,
+                price: price * 1.19,
+                quantity: quantity[text],
+                name: name.language[text],
+                reference,
+            });
+        });
+        return producto;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const updateProduct = async (id, product) => {
+    try {
+        const res = await fetch(
+            `https://serverpruebas.tk/api/products/${id}?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH`,
+
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(product),
+            }
+        );
+        const data = await res.text();
+        let jsonObj = parser.parse(data);
+        let products = jsonObj.prestashop.products.product;
+        let producto = [];
+        let text = '#text';
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({
+                id,
+                price: price * 1.19,
+                quantity: quantity[text],
+                name: name.language[text],
+                reference,
+            });
+        });
+        return producto;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const deleteProduct = async (id) => {
+    try {
+        const res = await fetch(
+            `https://serverpruebas.tk/api/products/${id}?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH`,
+
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        const data = await res.text();
+        let jsonObj = parser.parse(data);
+        let products = jsonObj.prestashop.products.product;
+        let producto = [];
+        let text = '#text';
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({
+                id,
+                price: price * 1.19,
+                quantity: quantity[text],
+                name: name.language[text],
+                reference,
+            });
+        });
+        return producto;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+app.get('/products', async (req, res) => {
+    const products = await getProducts();
+    res.json(products);
+});
+
+app.post('/products', async (req, res) => {
+    const product = {
+        product: {
+            id_manufacturer: 1,
+            id_supplier: 0,
+            id_category_default: 2,
+            id_shop_default: 1,
+            id_tax_rules_group: 0,
+            on_sale: 0,
+            online_only: 0,
+            ean13: '',
+            isbn: '',
+            upc: '',
+            ecotax: 0,
+            quantity: 100,
+            minimal_quantity: 1,
+            price: 19.99,
+            wholesale_price: 0,
+            unity: '',
+            unit_price_ratio: 0,
+            additional_shipping_cost: 0,
+            reference: 'demo_1',
+            supplier_reference: '',
+            location: '',
+            width: 0,
+            height: 0,
+            depth: 0,
+            weight: 0,
+            out_of_stock: 2,
+            quantity_discount: 0,
+            customizable: 0,
+            uploadable_files: 0,
+            text_fields: 0,
+            active: 1,
+            redirect_type: '404',
+            id_type_redirected: 0,
+            available_for_order: 1,
+            available_date: '0000-00-00',
+            show_condition: 0,
+            condition: 'new',
+            show_price: 1,
+            indexed: 1,
+            visibility: 'both',
+            cache_is_pack: 0,
+            cache_has_attachments: 0,
+            is_virtual: 0,
+            cache_default_attribute: 0,
+            date_add: '2020-12-01 00:00:00',
+            date_upd: '2020-12-01',
+            advanced_stock_management: 0,
+            pack_stock_type: 3,
+            state: 1,
+            description: {
+                language: {
+
+                    '#text': 'Demo product description',
+                    '@id': '1',
+                },
+            },
+            description_short: {
+                language: {
+                    '#text': 'Demo product description short',
+                    '@id': '1',
+                },
+            },
+            link_rewrite: {
+                language: {
+                    '#text': 'demo-product',
+                    '@id': '1',
+                },
+            },
+            meta_description: {
+                language: {
+                    '#text': 'Demo product meta description',
+                    '@id': '1',
+                },
+            },
+            meta_keywords: {
+                language: {
+                    '#text': 'demo, product, meta, keywords',
+                    '@id': '1',
+                },
+            },
+            meta_title: {
+                language: {
+                    '#text': 'Demo product meta title',
+
+                    '@id': '1',
+                },
+            },
+            name: {
+                language: {
+                    '#text': 'Demo product',
+                    '@id': '1',
+                },
+            },
+            available_now: {
+                language: {
+                    '#text': 'In stock',
+                    '@id': '1',
+                },
+            },
+            available_later: {
+                language: {
+                    '#text': '',
+                    '@id': '1',
+                },
+            },
+            tags: {
+                language: {
+                    '#text': 'demo, product, tags',
+                    '@id': '1',
+                },
+            },
+            associations: {
+                product_option_values: {
+                    product_option_value: [],
+                },
+                images: {
+                    image: [],
+                },
+                combinations: {
+                    combination: [],
+                },
+                product_features: {
+                    product_feature: [],
+                },
+                stock_availables: {
+                    stock_available: [],
+                },
+                tags: {
+                    tag: [],
+                },
+                accessories: {
+                    accessory: [],
+                },
+                pack_items: {
+                    pack_item: [],
+                },
+            },
+        },
+    };
+    const products = await createProduct(product);
+    res.json(products);
+});
+
+app.put('/products/:id', async (req, res) => {   
+    const { id } = req.params;
+    const product = {
+        product: {
+            id_manufacturer: 1,
+            id_supplier: 0,
+            id_category_default: 2,
+            id_shop_default: 1,
+            id_tax_rules_group: 0,
+            on_sale: 0,
+            online_only: 0,
+            ean13: '',
+            isbn: '',
+            upc: '',
+            ecotax: 0,
+            quantity: 100,
+            minimal_quantity: 1,
+            price: 19.99,
+            wholesale_price: 0,
+            unity: '',
+            unit_price_ratio: 0,
+            additional_shipping_cost: 0,
+            reference: 'demo_1',
+            supplier_reference: '',
+            location: '',
+            width: 0,
+            height: 0,
+            depth: 0,
+            weight: 0,
+            out_of_stock: 2,
+            quantity_discount: 0,
+            customizable: 0,
+            uploadable_files: 0,
+            text_fields: 0,
+            active: 1,
+            redirect_type: '404',
+            id_type_redirected: 0,
+            available_for_order: 1,
+            available_date: '0000-00-00',
+            show_condition: 0,
+            condition: 'new',
+            show_price: 1,
+            indexed: 1,
+            visibility: 'both',
+            cache_is_pack: 0,
+            cache_has_attachments: 0,
+            is_virtual: 0,
+            cache_default_attribute: 0,
+            date_add: '2020-12-01 00:00:00',
+            date_upd: '2020-12-01',
+            advanced_stock_management: 0,
+            pack_stock_type: 3,
+            state: 1,
+            description: {
+                language: {
+
+                    '#text': 'Demo product description',
+                    '@id': '1',
+                },
+            },
+            description_short: {
+                language: {
+                    '#text': 'Demo product description short',
+                    '@id': '1',
+                },
+            },
+            link_rewrite: {
+                language: {
+                    '#text': 'demo-product',
+                    '@id': '1',
+                },
+            },
+            meta_description: {
+                language: {
+                    '#text': 'Demo product meta description',
+                    '@id': '1',
+                },
+            },
+            meta_keywords: {
+                language: {
+                    '#text': 'demo, product, meta, keywords',
+                    '@id': '1',
+                },
+            },
+            meta_title: {
+                language: {
+                    '#text': 'Demo product meta title',
+
+                    '@id': '1',
+                },
+            },
+            name: {
+                language: {
+                    '#text': 'Demo product',
+                    '@id': '1',
+                },
+            },
+            available_now: {
+                language: {
+                    '#text': 'In stock',
+                    '@id': '1',
+                },
+            },
+            available_later: {
+                language: {
+                    '#text': '',
+
+                    '@id': '1',
+                },
+            },
+            tags: {
+                language: {
+                    '#text': 'demo, product, tags',
+                    '@id': '1',
+                },
+            },
+            associations: {
+                product_option_values: {
+                    product_option_value: [],
+                },
+                images: {
+                    image: [],
+                },
+                combinations: {
+                    combination: [],
+                },
+                product_features: {
+                    product_feature: [],
+                },
+                stock_availables: {
+                    stock_available: [],
+                },
+                tags: {
+                    tag: [],
+                },
+                accessories: {
+                    accessory: [],
+                },
+                pack_items: {
+                    pack_item: [],
+                },
+            },
+        },
+    };
+    const products = await updateProduct(id, product);
+    res.json(products);
+});
+
+app.delete('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const products = await deleteProduct(id);
+    res.json(products);
+});
+
+app.listen(3001, () => {
+    console.log('Server on port 3001');
+})
+
+
+
+
+
+

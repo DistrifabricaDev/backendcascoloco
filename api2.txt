@@ -1,0 +1,77 @@
+const { PrestaShopWebservice } = require('@alexgenovese/prestashop-api-nodejs');
+const { XMLParser } = require("fast-xml-parser");
+const options = {
+    ignoreAttributes: false,
+    attributeNamePrefix: "",
+};
+const parser = new XMLParser(options);
+
+const prestashop = new PrestaShopWebservice({
+    url: 'https://serverpruebas.tk/',
+    key: 'GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH',
+    debug: true
+});
+
+const getProducts = async () => {
+    try {
+        const res = await prestashop.get('products', {
+            display: 'full',
+            output_format: 'JSON'
+        });
+        let products = res.products.product;
+        let producto = []
+        let text = '#text'
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({ id, price: price * 1.19, quantity: quantity[text], name: name.language[text], reference })
+        })
+        return producto
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const createProduct = async (product) => {
+    try {
+        const res = await prestashop.add('products', product);
+        let products = res.products.product;
+        let producto = []
+        let text = '#text'
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({ id, price: price * 1.19, quantity: quantity[text], name: name.language[text], reference })
+        })
+        return producto
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const updateProduct = async (id, product) => {
+    try {
+        const res = await prestashop.update('products', id, product);
+        let products = res.products.product;
+        let producto = []
+        let text = '#text'
+        products.map(({ id, price, quantity, name, reference }) => {
+            producto.push({ id, price: price * 1.19, quantity: quantity[text], name: name.language[text], reference })
+        })
+        return producto
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const deleteProduct = async (id) => {
+    try {
+        const res = await prestashop.delete('products', id);
+        return res
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = {
+    getProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct
+}
