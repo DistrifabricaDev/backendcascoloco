@@ -1,4 +1,5 @@
 const request = require('request');
+const { parse } = require('request/lib/cookies');
 const xml2js = require('xml2js');
 
 function getProductos() {
@@ -18,7 +19,30 @@ function getProductos() {
             }
 
             // Print the parsed result
-            console.log(result);
+            console.log(result.name);
+        });
+    });
+}
+
+function getProducto(id) {
+    const url = `https://serverpruebas.tk/api/products/${id}?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH`;
+
+    request.get(url, (error, response, body) => {
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        // Parse the XML response
+        xml2js.parseString(body, (err, result) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+        let resultado = body
+        let reslutadoParseado = parse.parse(resultado)
+            // Print the parsed result
+            console.log(reslutadoParseado);
         });
     });
 }
@@ -56,5 +80,6 @@ function crearProducto(nombre, precio) {
     });
 }
 
-getProductos();
-crearProducto('Nuevo producto', 100);
+// crearProducto('Nuevo producto', 100);
+// getProductos();
+getProducto(121);

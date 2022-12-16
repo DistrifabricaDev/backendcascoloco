@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-
+const axios = require('axios');
 const { XMLParser } = require("fast-xml-parser");
 const options = {
     ignoreAttributes: false,
@@ -7,26 +7,42 @@ const options = {
 };
 const parser = new XMLParser(options);
 
+// const getProducts = async () => {
+//     try {
+//         const res = await fetch(
+//             'https://serverpruebas.tk/api/products?output_format=JSON&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH'
+//         );
+//         const data = res
+        // let jsonObj = parser.parse(data);
+        // let products = jsonObj.prestashop.products.product;
+        // let producto = []
+        // let text = '#text'
+        // products.map(({ id, price, quantity, name, reference }) => {
+        //     producto.push({ id, price: price * 1.19, quantity: quantity[text], name: name.language[text], reference })
+        // })
+//         console.log(data)
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
+
+// getProducts()
+
+/* How create getProducts fuction with axios to https://serverpruebas.tk/api/products?output_format=JSON&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH*/
+
+
+
 const getProducts = async () => {
     try {
-        const res = await fetch(
-            'https://serverpruebas.tk/api/products/?display=full&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH'
-        );
-        const data = await res.text();
-        let jsonObj = parser.parse(data);
-        let products = jsonObj.prestashop.products.product;
-        let producto = []
-        let text = '#text'
-        products.map(({ id, price, quantity, name, reference }) => {
-            producto.push({ id, price: price * 1.19, quantity: quantity[text], name: name.language[text], reference })
-        })
-        return producto
+        const res = await axios.get('https://serverpruebas.tk/api/products?output_format=JSON&ws_key=GJM2TB1KNADU6GT7LVFWV1MFH3Y6XTRH');
+        const data = res.data;
+        console.log(data)
     } catch (error) {
         console.log(error);
     }
 };
 
-/* filtrar producto por id */
+getProducts()
 
 const getProduct = async (id) => {                                                                                                                                                      
     try {
@@ -36,7 +52,7 @@ const getProduct = async (id) => {
         const data = await res.text();
         let jsonObj = parser.parse(data);
         let text1 = "#text"
-        let products = jsonObj.prestashop.product.quantity;
+        let products = jsonObj.prestashop.product.name;
         let producto = []
         // let text = '#text'
         // products.map(({ text}) => {
