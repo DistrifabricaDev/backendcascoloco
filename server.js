@@ -3,7 +3,9 @@ const express = require('express');
 const app = express();
 const port = 3001;
 const { getProducts, createProduct, updateProduct, getProduct } = require('./api');
+const xml2js = require('xml2js');
 var cors = require('cors')
+
 
 app.listen(port, () => {
   console.log(`Servidor corriendo ${port}`);
@@ -33,9 +35,10 @@ app.post('/products/create', async (req, res) => {
     res.json(product);
 });
 
-app.put('/products/:id', async (req, res) => {
-    const product = await updateProduct(req.params.id, req.body);
+app.put('/products/edit/', async (req, res) => {
+    const product = await updateProduct(req.body);
     res.json(product);
 });
+
 
 
